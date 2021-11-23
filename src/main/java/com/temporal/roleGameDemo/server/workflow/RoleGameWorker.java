@@ -1,5 +1,6 @@
-package com.temporal.roleGameDemo.server;
+package com.temporal.roleGameDemo.server.workflow;
 
+import com.temporal.roleGameDemo.server.weather.WeatherProviderImpl;
 import com.temporal.roleGameDemo.shared.TaskQueueNames;
 import io.temporal.client.WorkflowClient;
 import io.temporal.serviceclient.WorkflowServiceStubs;
@@ -17,8 +18,6 @@ public class RoleGameWorker
         Worker worker = factory.newWorker(TaskQueueNames.ROLE_GAME_TASK_QUEUE);
 
         worker.registerWorkflowImplementationTypes(MapNavigationWorkflowImpl.class);
-
-        //worker.registerActivitiesImplementations(new FormatImpl());
 
         factory.start();
     }

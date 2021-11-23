@@ -63,6 +63,7 @@ public class GameUI
 
             printMap(mapWidth, mapHeight, view);
             printTreasureInfo(view);
+            printWeatherInfo(view);
 
             keepRunning = readAndProcessNextUserCommand(mapNavigation, mapNavigationWorkflow, mapNavigationResult);
         }
@@ -147,6 +148,11 @@ public class GameUI
                     case "right":
                         System.out.println("Navigating East...");
                         mapNavigation.tryMoveRight();
+                        return true;  // UI keeps running.
+
+                    case "weather":
+                        System.out.println("Checking the weather...");
+                        mapNavigation.checkWeather();
                         return true;  // UI keeps running.
 
                     case "quit":
@@ -337,6 +343,19 @@ public class GameUI
         }
     }
 
+    private void printWeatherInfo(View view)
+    {
+        String weatherInfo = view.getWeatherInfo();
+        if (weatherInfo == null)
+        {
+            System.out.println("(You did not check the weather since you moved to this location.)");
+        }
+        else
+        {
+            System.out.println("(You checked the weather and here it is: \"" + weatherInfo + "\".)");
+        }
+    }
+
     private void printCommandHelp()
     {
         System.out.println("Navigate the map, find the Treasure, and bring it home while avoiding the Monsters.");
@@ -346,6 +365,7 @@ public class GameUI
         System.out.println("  - Down");
         System.out.println("  - Left");
         System.out.println("  - Right");
+        System.out.println("  - Weather");
         System.out.println("  - Quit");
         System.out.println("  - Sleep");
         System.out.println("  - Legend");

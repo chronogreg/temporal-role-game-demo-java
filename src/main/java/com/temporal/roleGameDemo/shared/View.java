@@ -106,6 +106,8 @@ public class View {
         str.append(posY);
         str.append("); Treasure: ");
         str.append(hasTreasure ? 'Y' : 'N');
+        str.append("; Weather: ");
+        str.append(weatherInfo == null ? "<unknown>" : weatherInfo);
         str.append("; Cells:");
         str.append("\n");
 

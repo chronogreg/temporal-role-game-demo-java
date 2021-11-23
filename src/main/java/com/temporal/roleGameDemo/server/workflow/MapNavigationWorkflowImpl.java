@@ -1,11 +1,11 @@
-package com.temporal.roleGameDemo.server;
+package com.temporal.roleGameDemo.server.workflow;
 
+import java.time.Duration;
 import java.util.Random;
 
-import com.temporal.roleGameDemo.shared.NavigationResults;
-import com.temporal.roleGameDemo.shared.View;
-import com.temporal.roleGameDemo.shared.CellKinds;
-import com.temporal.roleGameDemo.shared.MapNavigationWorkflow;
+import com.temporal.roleGameDemo.server.shared.WeatherProvider;
+import com.temporal.roleGameDemo.shared.*;
+import io.temporal.activity.ActivityOptions;
 import io.temporal.failure.CanceledFailure;
 import io.temporal.workflow.*;
 
@@ -18,13 +18,25 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
 
     private int currPosX;
     private int currPosY;
-    private String currWeather;
+    private String currWeatherInfo;
 
     boolean hasFoundTreasure;
 
     private boolean hasProcessedSignal;
     private boolean isCancelled;
     private boolean isWeatherRequested;
+
+    private WeatherProvider weatherProvider;
+
+    public MapNavigationWorkflowImpl()
+    {
+        ActivityOptions weatherProviderOptions = ActivityOptions.newBuilder()
+                .setTaskQueue(TaskQueueNames.ROLE_GAME_TASK_QUEUE)
+                .setStartToCloseTimeout(Duration.ofMinutes(1))
+                .build();
+
+        weatherProvider = Workflow.newActivityStub(WeatherProvider.class, weatherProviderOptions);
+    }
 
     @Override
     public NavigationResults navigateMap(int width, int height)
@@ -100,7 +112,14 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
 
             if (isWeatherRequested)
             {
-
+                try
+                {
+                    currWeatherInfo = weatherProvider.getCurrentRainierForecast();
+                }
+                catch (Exception ex)
+                {
+                    currWeatherInfo = ex.getClass().getName() + ": " + ex.getMessage();
+                }
             }
 
             waitForNextSignal();
@@ -164,7 +183,7 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
                              map[currPosX-1][currPosY-1], map[currPosX][currPosY-1], map[currPosX+1][currPosY-1],
                              map[currPosX-1][currPosY],   map[currPosX][currPosY],   map[currPosX+1][currPosY],
                              map[currPosX-1][currPosY+1], map[currPosX][currPosY+1], map[currPosX+1][currPosY+1],
-                             hasFoundTreasure, currWeather);
+                             hasFoundTreasure, currWeatherInfo);
 
         // System.out.println("lookAround result:\n" + view.toString());
         return view;
@@ -180,7 +199,7 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
         {
             currPosX = targetX;
             currPosY = targetY;
-            currWeather = null;
+            currWeatherInfo = null;
             hasProcessedSignal = true;
         }
     }
