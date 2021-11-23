@@ -1,5 +1,6 @@
 package com.temporal.roleGameDemo.server.workflow;
 
+import java.net.InetAddress;
 import java.time.Duration;
 import java.util.Random;
 
@@ -61,6 +62,7 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
         initMap(width, height);
         currPosX = 1;
         currPosY = 1;
+        currWeatherInfo = Workflow.sideEffect(String.class, () -> getInitialWeatherForecast());
         hasFoundTreasure = false;
         isCancelled = false;
 
@@ -216,6 +218,18 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
             System.out.println("DEBUG: If we wanted to handle cancellation, it would be here,"
                              + " but for now there is noting to do for such handling.");
             throw cf;
+        }
+    }
+
+    private String getInitialWeatherForecast()
+    {
+        try
+        {
+            return "It's always sunny on " + InetAddress.getLocalHost().getHostName();
+        }
+        catch (Exception ex)
+        {
+            return "Initial weather forecast did not work out";
         }
     }
 
