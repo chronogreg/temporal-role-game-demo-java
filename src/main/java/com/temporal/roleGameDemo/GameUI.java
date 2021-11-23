@@ -31,6 +31,8 @@ public class GameUI
     private static final char NotInViewChar = '.';
     private static final String MapIndentString = "    ";
 
+    private boolean isDisconnectRequested;
+
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         (new GameUI()).run();
     }
@@ -48,6 +50,7 @@ public class GameUI
         int mapWidth = mapNavigation.getMapWidth();
         int mapHeight = mapNavigation.getMapHeight();
 
+        isDisconnectRequested = false;
         boolean keepRunning = true;
         while (!mapNavigationResult.isDone() && keepRunning)
         {
@@ -64,25 +67,34 @@ public class GameUI
             keepRunning = readAndProcessNextUserCommand(mapNavigation, mapNavigationWorkflow, mapNavigationResult);
         }
 
-        System.out.println();
-        System.out.println("Game over.");
-
-        try
+        if (isDisconnectRequested)
         {
-            System.out.println("Game outcome: " + mapNavigationResult.get() + ".");
+            System.out.println();
+            System.out.println("Disconnected from the game, but game is not over.");
         }
-        catch (Exception ex)
+        else
         {
-            if (mapNavigationResult.isCancelled())
-            {
-                // Checking for Cancelled earlier is not safe due to the race it results in.
-                System.out.println("Game outcome: CANCELLED.");
-            }
-            {
-                System.out.println("Game outcome: ERROR (" + ex.getClass().getName() + ": " + ex.getMessage() + ").");
-            }
+            System.out.println();
+            System.out.println("Game over.");
 
-            throw ex;
+            try
+            {
+                System.out.println("Game outcome: " + mapNavigationResult.get() + ".");
+            }
+            catch (Exception ex)
+            {
+                if (mapNavigationResult.isCancelled())
+                {
+                    // Checking for Cancelled earlier is not safe due to the race it results in.
+                    System.out.println("Game outcome: CANCELLED.");
+                }
+                else
+                {
+                    System.out.println("Game outcome: ERROR (" + ex.getClass().getName() + ": " + ex.getMessage() + ").");
+                }
+
+                throw ex;
+            }
         }
 
         System.out.println();
@@ -145,6 +157,7 @@ public class GameUI
                     case "sleep":
                         System.out.println("You set up camp. Game will be saved...");
                         // We simply need to disconnect form the game, and it will be magically persisted by Temporal.
+                        isDisconnectRequested = true;
                         return false;  // UI quits.
 
                     case "help":
