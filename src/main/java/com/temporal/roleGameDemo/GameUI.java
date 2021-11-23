@@ -151,7 +151,7 @@ public class GameUI
 
                     case "quit":
                         System.out.println("Giving up and ending the game...");
-                        mapNavigationWorkflow.cancel();
+                        mapNavigation.quit();
                         return false;  // UI quits.
 
                     case "sleep":

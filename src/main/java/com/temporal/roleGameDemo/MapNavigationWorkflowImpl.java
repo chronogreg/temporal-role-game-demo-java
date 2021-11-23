@@ -71,7 +71,7 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
             }
             else if (currentCell == CellKinds.Empty)
             {
-                // nothing to do.
+                ; // nothing to do.
             }
             else
             {
@@ -100,18 +100,27 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
     }
 
     @Override
-    public void tryMoveDown() {
+    public void tryMoveDown()
+    {
         tryMoveTo(currPosX, currPosY + 1);
     }
 
     @Override
-    public void tryMoveLeft() {
+    public void tryMoveLeft()
+    {
         tryMoveTo(currPosX - 1, currPosY);
     }
 
     @Override
-    public void tryMoveRight() {
+    public void tryMoveRight()
+    {
         tryMoveTo(currPosX + 1, currPosY);
+    }
+
+    @Override
+    public void quit()
+    {
+        wasCancelled = true;
     }
 
     @Override
@@ -158,12 +167,13 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
         try
         {
             hasMoved = false;
-            Workflow.await(() -> hasMoved);
+            Workflow.await(() -> (hasMoved || wasCancelled));
         }
         catch (CanceledFailure cf)
         {
-            wasCancelled = true;
-            System.out.println("DEBUG: Set wasCancelled = true.");
+            System.out.println("DEBUG: If we wanted to handle cancellation, it would be here,"
+                             + " but for now there is noting to do for such handling.");
+            throw cf;
         }
     }
 

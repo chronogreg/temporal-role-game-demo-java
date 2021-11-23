@@ -20,6 +20,9 @@ public interface MapNavigationWorkflow {
     @SignalMethod
     public void tryMoveRight();
 
+    @SignalMethod
+    public void quit();
+
     @QueryMethod
     public int getMapWidth();
 
