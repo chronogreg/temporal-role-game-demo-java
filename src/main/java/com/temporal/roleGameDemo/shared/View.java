@@ -1,6 +1,7 @@
-package com.temporal.roleGameDemo;
+package com.temporal.roleGameDemo.shared;
 
 import com.fasterxml.jackson.annotation.*;
+import com.temporal.roleGameDemo.shared.CellKinds;
 
 import java.lang.Math;
 
@@ -19,18 +20,23 @@ public class View {
     @JsonProperty("hasTreasure")
     private boolean hasTreasure;
 
+    @JsonProperty("weatherInfo")
+    private String weatherInfo;
+
     public View()
     {
-        this(-1, -1, false,
+        this(-1, -1,
              CellKinds.Unknown, CellKinds.Unknown, CellKinds.Unknown,
              CellKinds.Unknown, CellKinds.Unknown, CellKinds.Unknown,
-             CellKinds.Unknown, CellKinds.Unknown, CellKinds.Unknown);
+             CellKinds.Unknown, CellKinds.Unknown, CellKinds.Unknown,
+             false, null);
     }
 
-    public View(int x, int y, boolean hasTreasure,
+    public View(int x, int y,
                 CellKinds cellUL, CellKinds cellU, CellKinds cellUR,
                 CellKinds cellL, CellKinds cell, CellKinds cellR,
-                CellKinds cellDL, CellKinds cellD, CellKinds cellDR)
+                CellKinds cellDL, CellKinds cellD, CellKinds cellDR,
+                boolean hasTreasure, String weatherInfo)
     {
         // Arras is indexed as [x][y], we an array of columns (not an array or rows):
         cells = new CellKinds[][] {{cellUL, cellL, cellDL},
@@ -40,6 +46,7 @@ public class View {
         posX = x;
         posY = y;
         this.hasTreasure = hasTreasure;
+        this.weatherInfo = weatherInfo;
     }
 
     public int getPositionX()
@@ -55,6 +62,11 @@ public class View {
     public boolean hasTreasure()
     {
         return hasTreasure;
+    }
+
+    public String getWeatherInfo()
+    {
+        return weatherInfo;
     }
 
     public CellKinds getCellKindRelative(int dX, int dY)

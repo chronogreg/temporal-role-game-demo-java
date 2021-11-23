@@ -1,7 +1,11 @@
-package com.temporal.roleGameDemo;
+package com.temporal.roleGameDemo.server;
 
 import java.util.Random;
 
+import com.temporal.roleGameDemo.shared.NavigationResults;
+import com.temporal.roleGameDemo.shared.View;
+import com.temporal.roleGameDemo.shared.CellKinds;
+import com.temporal.roleGameDemo.shared.MapNavigationWorkflow;
 import io.temporal.failure.CanceledFailure;
 import io.temporal.workflow.*;
 
@@ -14,11 +18,13 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
 
     private int currPosX;
     private int currPosY;
+    private String currWeather;
 
     boolean hasFoundTreasure;
 
-    private boolean hasMoved;
-    private boolean wasCancelled;
+    private boolean hasProcessedSignal;
+    private boolean isCancelled;
+    private boolean isWeatherRequested;
 
     @Override
     public NavigationResults navigateMap(int width, int height)
@@ -44,13 +50,14 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
         currPosX = 1;
         currPosY = 1;
         hasFoundTreasure = false;
-        wasCancelled = false;
+        isCancelled = false;
 
-        waitForNextMove();
+        waitForNextSignal();
         while (true)
         {
-            CellKinds currentCell = map[currPosX][currPosY];
+            // Act on current position:
 
+            CellKinds currentCell = map[currPosX][currPosY];
             System.out.println("DEBUG: Player position: (" + currPosX + "," + currPosY + "); Cell Kind: " + currentCell+ ".");
 
             if (currentCell == CellKinds.Home)
@@ -83,13 +90,20 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
                                               + ").");
             }
 
-            if (wasCancelled)
+            // Act on possible requests received via signals:
+
+            if (isCancelled)
             {
                 System.out.println("DEBUG: Exiting with " + NavigationResults.GameAborted + ".");
                 return NavigationResults.GameAborted;
             }
 
-            waitForNextMove();
+            if (isWeatherRequested)
+            {
+
+            }
+
+            waitForNextSignal();
         }
     }
 
@@ -120,7 +134,15 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
     @Override
     public void quit()
     {
-        wasCancelled = true;
+        isCancelled = true;
+        hasProcessedSignal = true;
+    }
+
+    @Override
+    public void checkWeather()
+    {
+        isWeatherRequested = true;
+        hasProcessedSignal = true;
     }
 
     @Override
@@ -139,10 +161,10 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
     public View lookAround()
     {
         View view = new View(currPosX, currPosY,
-                             hasFoundTreasure,
                              map[currPosX-1][currPosY-1], map[currPosX][currPosY-1], map[currPosX+1][currPosY-1],
                              map[currPosX-1][currPosY],   map[currPosX][currPosY],   map[currPosX+1][currPosY],
-                             map[currPosX-1][currPosY+1], map[currPosX][currPosY+1], map[currPosX+1][currPosY+1]);
+                             map[currPosX-1][currPosY+1], map[currPosX][currPosY+1], map[currPosX+1][currPosY+1],
+                             hasFoundTreasure, currWeather);
 
         // System.out.println("lookAround result:\n" + view.toString());
         return view;
@@ -158,16 +180,17 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
         {
             currPosX = targetX;
             currPosY = targetY;
-            hasMoved = true;
+            currWeather = null;
+            hasProcessedSignal = true;
         }
     }
 
-    private void waitForNextMove()
+    private void waitForNextSignal()
     {
         try
         {
-            hasMoved = false;
-            Workflow.await(() -> (hasMoved || wasCancelled));
+            hasProcessedSignal = false;
+            Workflow.await(() -> hasProcessedSignal);
         }
         catch (CanceledFailure cf)
         {

@@ -1,5 +1,6 @@
-package com.temporal.roleGameDemo;
+package com.temporal.roleGameDemo.server;
 
+import com.temporal.roleGameDemo.shared.TaskQueueNames;
 import io.temporal.client.WorkflowClient;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.worker.Worker;
@@ -13,7 +14,7 @@ public class RoleGameWorker
         WorkflowClient client = WorkflowClient.newInstance(service);
 
         WorkerFactory factory = WorkerFactory.newInstance(client);
-        Worker worker = factory.newWorker(Shared.ROLE_GAME_TASK_QUEUE);
+        Worker worker = factory.newWorker(TaskQueueNames.ROLE_GAME_TASK_QUEUE);
 
         worker.registerWorkflowImplementationTypes(MapNavigationWorkflowImpl.class);
 

@@ -1,4 +1,4 @@
-package com.temporal.roleGameDemo;
+package com.temporal.roleGameDemo.shared;
 
 import io.temporal.workflow.*;
 
@@ -22,6 +22,9 @@ public interface MapNavigationWorkflow {
 
     @SignalMethod
     public void quit();
+
+    @SignalMethod
+    public void checkWeather();
 
     @QueryMethod
     public int getMapWidth();

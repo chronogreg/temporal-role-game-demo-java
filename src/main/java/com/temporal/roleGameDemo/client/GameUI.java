@@ -1,12 +1,14 @@
-package com.temporal.roleGameDemo;
+package com.temporal.roleGameDemo.client;
 
-import io.temporal.api.common.v1.WorkflowExecution;
-import io.temporal.api.filter.v1.StartTimeFilter;
+import com.temporal.roleGameDemo.shared.MapNavigationWorkflow;
+import com.temporal.roleGameDemo.shared.NavigationResults;
+import com.temporal.roleGameDemo.shared.TaskQueueNames;
+import com.temporal.roleGameDemo.shared.View;
+import com.temporal.roleGameDemo.shared.CellKinds;
 import io.temporal.api.filter.v1.WorkflowTypeFilter;
 import io.temporal.api.workflow.v1.WorkflowExecutionInfo;
 import io.temporal.api.workflowservice.v1.ListOpenWorkflowExecutionsRequest;
 import io.temporal.api.workflowservice.v1.ListOpenWorkflowExecutionsResponse;
-import io.temporal.api.workflowservice.v1.WorkflowServiceGrpc;
 import io.temporal.api.workflowservice.v1.WorkflowServiceGrpc.WorkflowServiceBlockingStub;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowException;
@@ -17,10 +19,8 @@ import io.temporal.serviceclient.WorkflowServiceStubs;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -276,7 +276,7 @@ public class GameUI
                              + "\" on a field ox size " + fieldWidth + "x" + fieldHeight + "...");
 
             WorkflowOptions newGameWorkflowOptions = WorkflowOptions.newBuilder()
-                    .setTaskQueue(Shared.ROLE_GAME_TASK_QUEUE)
+                    .setTaskQueue(TaskQueueNames.ROLE_GAME_TASK_QUEUE)
                     .setWorkflowId(gameName)
                     .build();
 
