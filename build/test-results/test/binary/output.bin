@@ -1,0 +1,66 @@
+ä10:14:23.362 [Test worker] INFO  i.t.s.WorkflowServiceStubsImpl - Created GRPC client for channel: ManagedChannelOrphanWrapper{delegate=ManagedChannelImpl{logId=1, target=directaddress:///bab28409-f06a-4a7c-9bb9-95fa41ed6e37}}
+ä10:14:23.403 [Test worker] INFO  i.t.s.WorkflowServiceStubsImpl - Created GRPC client for channel: ManagedChannelOrphanWrapper{delegate=ManagedChannelImpl{logId=5, target=directaddress:///4746567c-9469-4ae9-b180-4f13afa0d2ec}}
+Ü10:14:24.206 [Time-limited test] INFO  io.temporal.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.1S, pollBackoffMaximumInterval=PT1M, pollThreadCount=2, pollThreadNamePrefix='Workflow Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest"'}, identity=39760@Gragus-P70}
+â10:14:24.209 [Time-limited test] INFO  io.temporal.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.1S, pollBackoffMaximumInterval=PT1M, pollThreadCount=1, pollThreadNamePrefix='Local Activity Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest"'}, identity=39760@Gragus-P70}
+Ü10:14:24.212 [Time-limited test] INFO  io.temporal.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.1S, pollBackoffMaximumInterval=PT1M, pollThreadCount=5, pollThreadNamePrefix='Activity Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest"'}, identity=39760@Gragus-P70}
+‘10:14:24.214 [Time-limited test] INFO  io.temporal.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.1S, pollBackoffMaximumInterval=PT1M, pollThreadCount=5, pollThreadNamePrefix='Host Local Workflow Poller'}, identity=140983aa-773c-4157-8d41-c5648c6bba25}
+T10:14:24.799 [Time-limited test] INFO  io.temporal.worker.WorkerFactory - shutdown
+V10:14:24.799 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdown
+q10:14:24.800 [Host Local Workflow Poller: 2] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+q10:14:24.800 [Host Local Workflow Poller: 4] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+q10:14:24.801 [Host Local Workflow Poller: 1] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+q10:14:24.801 [Host Local Workflow Poller: 3] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+q10:14:24.801 [Host Local Workflow Poller: 5] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+V10:14:24.804 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdown
+Ð10:14:24.804 [Activity Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest": 5] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+Ð10:14:24.804 [Activity Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest": 1] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+Ð10:14:24.804 [Activity Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest": 3] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+Ð10:14:24.804 [Activity Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest": 2] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+Ð10:14:24.804 [Activity Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest": 4] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+V10:14:24.805 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdown
+Ö10:14:24.805 [Local Activity Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest": 1] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+V10:14:24.806 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdown
+Ð10:14:24.806 [Workflow Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest": 2] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+Ð10:14:24.806 [Workflow Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest": 1] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+W10:14:24.807 [Time-limited test] INFO  io.temporal.worker.WorkerFactory - shutdownNow
+{10:14:24.807 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdownNow poller=Host Local Workflow Poller
+Ú10:14:24.809 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdownNow poller=Activity Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest"
+à10:14:24.809 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdownNow poller=Local Activity Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest"
+Ú10:14:24.809 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdownNow poller=Workflow Poller taskQueue="WorkflowTest-testMockedGetGreeting-31a1929f-0970-4916-a04b-f918907e15ce", namespace="UnitTest"
+b10:14:24.810 [Time-limited test] INFO  io.temporal.worker.WorkerFactory - awaitTermination begin
+a10:14:24.810 [Time-limited test] INFO  io.temporal.worker.WorkerFactory - awaitTermination done
+`10:14:24.811 [Time-limited test] INFO  i.t.i.t.TestWorkflowService - Shutting down GRPC server
+U10:14:24.814 [Time-limited test] INFO  i.t.s.WorkflowServiceStubsImpl - shutdownNow
+ä10:14:24.822 [Test worker] INFO  i.t.s.WorkflowServiceStubsImpl - Created GRPC client for channel: ManagedChannelOrphanWrapper{delegate=ManagedChannelImpl{logId=9, target=directaddress:///b26b430c-8e15-4266-aa3c-9b8be5bedd43}}
+å10:14:24.827 [Test worker] INFO  i.t.s.WorkflowServiceStubsImpl - Created GRPC client for channel: ManagedChannelOrphanWrapper{delegate=ManagedChannelImpl{logId=13, target=directaddress:///efa3db02-2666-46c1-84ac-7b74f66b00dd}}
+Ö10:14:24.831 [Time-limited test] INFO  io.temporal.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.1S, pollBackoffMaximumInterval=PT1M, pollThreadCount=2, pollThreadNamePrefix='Workflow Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest"'}, identity=39760@Gragus-P70}
+Ü10:14:24.832 [Time-limited test] INFO  io.temporal.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.1S, pollBackoffMaximumInterval=PT1M, pollThreadCount=1, pollThreadNamePrefix='Local Activity Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest"'}, identity=39760@Gragus-P70}
+Ö10:14:24.833 [Time-limited test] INFO  io.temporal.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.1S, pollBackoffMaximumInterval=PT1M, pollThreadCount=5, pollThreadNamePrefix='Activity Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest"'}, identity=39760@Gragus-P70}
+‘10:14:24.833 [Time-limited test] INFO  io.temporal.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.1S, pollBackoffMaximumInterval=PT1M, pollThreadCount=5, pollThreadNamePrefix='Host Local Workflow Poller'}, identity=b7e4a5be-6703-4742-bda1-a6ea7c388d25}
+T10:14:24.849 [Time-limited test] INFO  io.temporal.worker.WorkerFactory - shutdown
+V10:14:24.849 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdown
+q10:14:24.850 [Host Local Workflow Poller: 1] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+q10:14:24.850 [Host Local Workflow Poller: 5] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+q10:14:24.850 [Host Local Workflow Poller: 2] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+q10:14:24.850 [Host Local Workflow Poller: 3] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+q10:14:24.850 [Host Local Workflow Poller: 4] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+V10:14:24.851 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdown
+Ê10:14:24.851 [Activity Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest": 2] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+Ê10:14:24.851 [Activity Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest": 3] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+Ê10:14:24.851 [Activity Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest": 4] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+Ê10:14:24.852 [Activity Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest": 5] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+Ê10:14:24.851 [Activity Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest": 1] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+V10:14:24.852 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdown
+Ð10:14:24.852 [Local Activity Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest": 1] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+V10:14:24.853 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdown
+Ê10:14:24.853 [Workflow Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest": 1] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+Ê10:14:24.853 [Workflow Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest": 2] INFO  io.temporal.internal.worker.Poller - poll loop is terminated
+W10:14:24.854 [Time-limited test] INFO  io.temporal.worker.WorkerFactory - shutdownNow
+{10:14:24.854 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdownNow poller=Host Local Workflow Poller
+Ô10:14:24.854 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdownNow poller=Activity Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest"
+Ú10:14:24.854 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdownNow poller=Local Activity Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest"
+Ô10:14:24.855 [Time-limited test] INFO  io.temporal.internal.worker.Poller - shutdownNow poller=Workflow Poller taskQueue="WorkflowTest-testGetGreeting-3914af3f-27d6-49ec-b199-abdef6ec27ff", namespace="UnitTest"
+b10:14:24.855 [Time-limited test] INFO  io.temporal.worker.WorkerFactory - awaitTermination begin
+a10:14:24.855 [Time-limited test] INFO  io.temporal.worker.WorkerFactory - awaitTermination done
+`10:14:24.855 [Time-limited test] INFO  i.t.i.t.TestWorkflowService - Shutting down GRPC server
+U10:14:24.856 [Time-limited test] INFO  i.t.s.WorkflowServiceStubsImpl - shutdownNow
