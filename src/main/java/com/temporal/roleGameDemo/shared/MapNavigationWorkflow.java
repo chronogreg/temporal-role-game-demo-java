@@ -26,6 +26,12 @@ public interface MapNavigationWorkflow {
     @SignalMethod
     public void checkWeather();
 
+    @SignalMethod
+    public void plantTrees();
+
+    @SignalMethod
+    public void treeHasGrown(int locationX, int locationY);
+
     @QueryMethod
     public int getMapWidth();
 

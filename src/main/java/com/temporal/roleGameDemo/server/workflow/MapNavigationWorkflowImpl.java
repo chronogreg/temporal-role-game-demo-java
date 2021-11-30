@@ -2,11 +2,14 @@ package com.temporal.roleGameDemo.server.workflow;
 
 import java.net.InetAddress;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Random;
 
 import com.temporal.roleGameDemo.server.shared.WeatherProvider;
 import com.temporal.roleGameDemo.shared.*;
 import io.temporal.activity.ActivityOptions;
+import io.temporal.api.common.v1.WorkflowExecution;
+import io.temporal.api.enums.v1.ParentClosePolicy;
 import io.temporal.failure.CanceledFailure;
 import io.temporal.workflow.*;
 
@@ -15,7 +18,7 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
     private int mapWidth;
     private int mapHeight;
 
-    private CellKinds[][] map;
+    private MapCell[][] map;
 
     private int currPosX;
     private int currPosY;
@@ -27,7 +30,7 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
     private boolean isCancelled;
     private boolean isWeatherRequested;
 
-    private WeatherProvider weatherProvider;
+    private final WeatherProvider weatherProvider;
 
     public MapNavigationWorkflowImpl()
     {
@@ -62,7 +65,7 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
         initMap(width, height);
         currPosX = 1;
         currPosY = 1;
-        currWeatherInfo = Workflow.sideEffect(String.class, () -> getInitialWeatherForecast());
+        currWeatherInfo = Workflow.sideEffect(String.class, this::getInitialWeatherForecast);
         hasFoundTreasure = false;
         isCancelled = false;
 
@@ -71,8 +74,17 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
         {
             // Act on current position:
 
-            CellKinds currentCell = map[currPosX][currPosY];
-            System.out.println("DEBUG: Player position: (" + currPosX + "," + currPosY + "); Cell Kind: " + currentCell+ ".");
+            CellKinds currentCell = map[currPosX][currPosY].getKind();
+
+            {
+                Instant workflowTimestamp = Instant.ofEpochMilli(Workflow.currentTimeMillis());
+                Instant realTimestamp = Instant.ofEpochMilli(System.currentTimeMillis());
+
+                System.out.println("DEBUG: Player position: (" + currPosX + "," + currPosY + ");"
+                        + " Cell Kind: " + currentCell + " ('" + map[currPosX][currPosY].getTextCharView() + "');"
+                        + " WorkflowTS: " + workflowTimestamp + ";"
+                        + " RealTS: " + realTimestamp + ";");
+            }
 
             if (currentCell == CellKinds.Home)
             {
@@ -83,7 +95,7 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
             else if (currentCell == CellKinds.Treasure)
             {
                 hasFoundTreasure = true;
-                map[currPosX][currPosY] = CellKinds.Empty;
+                map[currPosX][currPosY].setKind(CellKinds.Empty);
             }
             else if (currentCell == CellKinds.Monster)
             {
@@ -162,14 +174,66 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
     @Override
     public void checkWeather()
     {
-        isWeatherRequested = true;
-        hasProcessedSignal = true;
+        // Only accept the signal to query the weather if we have no weather info available.
+        if (currWeatherInfo == null)
+        {
+            isWeatherRequested = true;
+            hasProcessedSignal = true;
+        }
+    }
+
+    @Override
+    public void plantTrees()
+    {
+        // Request that the tree growth child starts:
+
+        ChildWorkflowOptions childOptions =
+                ChildWorkflowOptions.newBuilder()
+                                    .setParentClosePolicy(ParentClosePolicy.PARENT_CLOSE_POLICY_REQUEST_CANCEL)
+                                    .build();
+
+        TreeGrowthWorkflow treeWorkflow = Workflow.newChildWorkflowStub(TreeGrowthWorkflow.class, childOptions);
+        Async.procedure(treeWorkflow::growTrees, currPosX, currPosY);
+
+        // Wait for child to actually start:
+
+        Promise<WorkflowExecution> treeWorkflowExecution = Workflow.getWorkflowExecution(treeWorkflow);
+        treeWorkflowExecution.get();
+    }
+
+    @Override
+    public void treeHasGrown(int locationX, int locationY)
+    {
+        if (locationX < 1)
+        {
+            throw new IllegalArgumentException("locationX may not be < 1.");
+        }
+
+        if (locationY < 1)
+        {
+            throw new IllegalArgumentException("locationY may not be < 1.");
+        }
+
+        if (locationX >= mapWidth)
+        {
+            throw new IllegalArgumentException("locationX may not be >= mapWidth (=" + mapWidth + ").");
+        }
+
+        if (locationY >= mapHeight)
+        {
+            throw new IllegalArgumentException("locationY may not be >= mapHeight (=" + mapHeight + ").");
+        }
+
+        int prevTreeCount = map[locationX][locationY].getTreeCount();
+        int nextTreeCount = (prevTreeCount < 9) ? prevTreeCount + 1 : prevTreeCount;
+
+        map[locationX][locationY].setTreeCount(nextTreeCount);
     }
 
     @Override
     public int getMapWidth()
     {
-        return  mapWidth;
+        return mapWidth;
     }
 
     @Override
@@ -197,7 +261,7 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
                 && targetX < mapWidth
                 && targetY >= 0
                 && targetY < mapHeight
-                && map[targetX][targetY] != CellKinds.Wall)
+                && map[targetX][targetY].getKind() != CellKinds.Wall)
         {
             currPosX = targetX;
             currPosY = targetY;
@@ -238,10 +302,10 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
         // Create map:
         mapWidth = width + 2;
         mapHeight = height + 2;
-        map = new CellKinds[mapWidth][mapHeight];
+        map = new MapCell[mapWidth][mapHeight];
 
         // Init home cell:
-        map[1][1] = CellKinds.Home;
+        map[1][1] = new MapCell(CellKinds.Home);
 
         // Place the treasure:
         Random rnd = Workflow.newRandom();
@@ -253,7 +317,7 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
             tY = rnd.nextInt(height);
         }
 
-        map[tX + 1][tY + 1] = CellKinds.Treasure;
+        map[tX + 1][tY + 1] = new MapCell(CellKinds.Treasure);
 
         // Place walls and monsters:
 
@@ -265,26 +329,26 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
             {
                 if (y == 0)
                 {
-                    map[x][y] = CellKinds.Wall;
+                    map[x][y] = new MapCell(CellKinds.Wall);
                 }
                 else if (y == mapHeight - 1)
                 {
-                    map[x][y] = CellKinds.Wall;
+                    map[x][y] = new MapCell(CellKinds.Wall);
                 }
                 else if (x == 0)
                 {
-                    map[x][y] = CellKinds.Wall;
+                    map[x][y] = new MapCell(CellKinds.Wall);
                 }
                 else if (x == mapWidth - 1)
                 {
-                    map[x][y] = CellKinds.Wall;
+                    map[x][y] = new MapCell(CellKinds.Wall);
                 }
-                else if (map[x][y] != CellKinds.Home && map[x][y] != CellKinds.Treasure)
+                else if (map[x][y] == null)
                 {
                     double dice = rnd.nextDouble();
                     map[x][y] = (dice < monsterProbability)
-                                    ? CellKinds.Monster
-                                    : CellKinds.Empty;
+                                    ? new MapCell(CellKinds.Monster)
+                                    : new MapCell(CellKinds.Empty);
                 }
             }
         }

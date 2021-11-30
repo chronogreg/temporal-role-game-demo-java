@@ -18,6 +18,7 @@ public class RoleGameWorker
         Worker worker = factory.newWorker(TaskQueueNames.ROLE_GAME_TASK_QUEUE);
 
         worker.registerWorkflowImplementationTypes(MapNavigationWorkflowImpl.class);
+        worker.registerWorkflowImplementationTypes(TreeGrowthWorkflowImpl.class);
 
         factory.start();
     }

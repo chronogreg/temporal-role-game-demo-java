@@ -9,7 +9,7 @@ import java.lang.Math;
 public class View {
 
     @JsonProperty("cells")
-    private CellKinds[][] cells;
+    private MapCell[][] cells;
 
     @JsonProperty("posX")
     private int posX;
@@ -26,22 +26,22 @@ public class View {
     public View()
     {
         this(-1, -1,
-             CellKinds.Unknown, CellKinds.Unknown, CellKinds.Unknown,
-             CellKinds.Unknown, CellKinds.Unknown, CellKinds.Unknown,
-             CellKinds.Unknown, CellKinds.Unknown, CellKinds.Unknown,
+             new MapCell(CellKinds.Unknown), new MapCell(CellKinds.Unknown), new MapCell(CellKinds.Unknown),
+             new MapCell(CellKinds.Unknown), new MapCell(CellKinds.Unknown), new MapCell(CellKinds.Unknown),
+             new MapCell(CellKinds.Unknown), new MapCell(CellKinds.Unknown), new MapCell(CellKinds.Unknown),
              false, null);
     }
 
     public View(int x, int y,
-                CellKinds cellUL, CellKinds cellU, CellKinds cellUR,
-                CellKinds cellL, CellKinds cell, CellKinds cellR,
-                CellKinds cellDL, CellKinds cellD, CellKinds cellDR,
+                MapCell cellUL, MapCell cellU, MapCell cellUR,
+                MapCell cellL,  MapCell cell,  MapCell cellR,
+                MapCell cellDL, MapCell cellD, MapCell cellDR,
                 boolean hasTreasure, String weatherInfo)
     {
         // Arras is indexed as [x][y], we an array of columns (not an array or rows):
-        cells = new CellKinds[][] {{cellUL, cellL, cellDL},
-                                   {cellU, cell, cellD},
-                                   {cellUR, cellR, cellDR}};
+        cells = new MapCell[][] {{cellUL, cellL, cellDL},
+                                 {cellU, cell, cellD},
+                                 {cellUR, cellR, cellDR}};
 
         posX = x;
         posY = y;
@@ -69,7 +69,7 @@ public class View {
         return weatherInfo;
     }
 
-    public CellKinds getCellKindRelative(int dX, int dY)
+    public MapCell getCellKindRelative(int dX, int dY)
     {
         if (dX < -1 || dX > 1)
         {
@@ -89,11 +89,11 @@ public class View {
         return Math.abs(x - posX) <= 1 && Math.abs(y - posY) <= 1;
     }
 
-    public CellKinds getCellKindAbsolute(int x, int y)
+    public MapCell getCellKindAbsolute(int x, int y)
     {
         return isVisible(x, y)
                     ? getCellKindRelative(x - posX, y - posY)
-                    : CellKinds.Unknown;
+                    : new MapCell(CellKinds.Unknown);
     }
 
     public String toString()
@@ -111,19 +111,19 @@ public class View {
         str.append("; Cells:");
         str.append("\n");
 
-        str.append(CellKinds.GetTextCharView(getCellKindRelative(-1, -1)));
-        str.append(CellKinds.GetTextCharView(getCellKindRelative(0, -1)));
-        str.append(CellKinds.GetTextCharView(getCellKindRelative(1, -1)));
+        str.append(getCellKindRelative(-1, -1).getTextCharView());
+        str.append(getCellKindRelative(0, -1).getTextCharView());
+        str.append(getCellKindRelative(1, -1).getTextCharView());
         str.append("\n");
 
-        str.append(CellKinds.GetTextCharView(getCellKindRelative(-1, 0)));
-        str.append(CellKinds.GetTextCharView(getCellKindRelative(0, 0)));
-        str.append(CellKinds.GetTextCharView(getCellKindRelative(1, 0)));
+        str.append(getCellKindRelative(-1, 0).getTextCharView());
+        str.append(getCellKindRelative(0, 0).getTextCharView());
+        str.append(getCellKindRelative(1, 0).getTextCharView());
         str.append("\n");
 
-        str.append(CellKinds.GetTextCharView(getCellKindRelative(-1, 1)));
-        str.append(CellKinds.GetTextCharView(getCellKindRelative(0, 1)));
-        str.append(CellKinds.GetTextCharView(getCellKindRelative(1, 1)));
+        str.append(getCellKindRelative(-1, 1).getTextCharView());
+        str.append(getCellKindRelative(0, 1).getTextCharView());
+        str.append(getCellKindRelative(1, 1).getTextCharView());
         str.append("\n");
 
         return str.toString();

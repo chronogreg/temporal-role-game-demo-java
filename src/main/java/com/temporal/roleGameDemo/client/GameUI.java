@@ -1,10 +1,6 @@
 package com.temporal.roleGameDemo.client;
 
-import com.temporal.roleGameDemo.shared.MapNavigationWorkflow;
-import com.temporal.roleGameDemo.shared.NavigationResults;
-import com.temporal.roleGameDemo.shared.TaskQueueNames;
-import com.temporal.roleGameDemo.shared.View;
-import com.temporal.roleGameDemo.shared.CellKinds;
+import com.temporal.roleGameDemo.shared.*;
 import io.temporal.api.filter.v1.WorkflowTypeFilter;
 import io.temporal.api.workflow.v1.WorkflowExecutionInfo;
 import io.temporal.api.workflowservice.v1.ListOpenWorkflowExecutionsRequest;
@@ -33,7 +29,8 @@ public class GameUI
 
     private boolean isDisconnectRequested;
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws ExecutionException, InterruptedException
+    {
         (new GameUI()).run();
     }
 
@@ -65,7 +62,7 @@ public class GameUI
             printTreasureInfo(view);
             printWeatherInfo(view);
 
-            keepRunning = readAndProcessNextUserCommand(mapNavigation, mapNavigationWorkflow, mapNavigationResult);
+            keepRunning = readAndProcessNextUserCommand(mapNavigation, mapNavigationResult);
         }
 
         if (isDisconnectRequested)
@@ -103,7 +100,6 @@ public class GameUI
     }
 
     private boolean readAndProcessNextUserCommand(MapNavigationWorkflow mapNavigation,
-                                                  WorkflowStub mapNavigationWorkflow,
                                                   CompletableFuture<NavigationResults> mapNavigationResult)
     {
         try
@@ -119,6 +115,10 @@ public class GameUI
                 if (command != null)
                 {
                     command = command.toLowerCase();
+                }
+                else
+                {
+                    command = "";
                 }
 
                 // Reading command from stdin takes a long time. Let's check for completion again:
@@ -153,6 +153,11 @@ public class GameUI
                     case "weather":
                         System.out.println("Checking the weather...");
                         mapNavigation.checkWeather();
+                        return true;  // UI keeps running.
+
+                    case "plant":
+                        System.out.println("You plant some trees...");
+                        mapNavigation.plantTrees();
                         return true;  // UI keeps running.
 
                     case "quit":
@@ -205,7 +210,7 @@ public class GameUI
                 .setTypeFilter(WorkflowTypeFilter.newBuilder().setName("MapNavigationWorkflow"))
                 .build();
 
-        ListOpenWorkflowExecutionsResponse runningGamesResponse = workflowService. listOpenWorkflowExecutions(openGamesRequest);
+        ListOpenWorkflowExecutionsResponse runningGamesResponse = workflowService.listOpenWorkflowExecutions(openGamesRequest);
         List<WorkflowExecutionInfo> runningGames = runningGamesResponse.getExecutionsList();
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("'at' HH:mm:ss 'on' yyyy-MM-dd");
@@ -229,7 +234,7 @@ public class GameUI
         int loadChoice = -1;
         while (loadChoice < 0 || loadChoice > runningGames.size())
         {
-            System.out.println("");
+            System.out.println();
             System.out.println("Enter a number 0.." + runningGames.size() + ":");
             System.out.print("> ");
 
@@ -295,7 +300,7 @@ public class GameUI
         {
             WorkflowExecutionInfo gameToLoad = runningGames.get(loadChoice - 1);
 
-            System.out.println("");
+            System.out.println();
             System.out.println("Loading game \""+ gameToLoad.getExecution().getWorkflowId() + "\".");
 
             game = workflowClient.newWorkflowStub(MapNavigationWorkflow.class,
@@ -318,8 +323,8 @@ public class GameUI
                 }
                 else if (view.isVisible(x, y))
                 {
-                    CellKinds viewCell = view.getCellKindAbsolute(x, y);
-                    System.out.print(CellKinds.GetTextCharView(viewCell));
+                    MapCell viewCell = view.getCellKindAbsolute(x, y);
+                    System.out.print(viewCell.getTextCharView());
                 }
                 else
                 {
@@ -366,6 +371,7 @@ public class GameUI
         System.out.println("  - Left");
         System.out.println("  - Right");
         System.out.println("  - Weather");
+        System.out.println("  - Plant");
         System.out.println("  - Quit");
         System.out.println("  - Sleep");
         System.out.println("  - Legend");
@@ -379,17 +385,19 @@ public class GameUI
                          + "': This is YOU.");
         System.out.println("  - '" + NotInViewChar
                          + "': You CANNOT SEE that cell.");
-        System.out.println("  - '" + CellKinds.GetTextCharView(CellKinds.Empty)
+        System.out.println("  - '" + CellKinds.getTextCharView(CellKinds.Empty)
                          + "': You can see that cell and it is EMPTY.");
-        System.out.println("  - '" + CellKinds.GetTextCharView(CellKinds.Wall)
+        System.out.println("  - '" + "N=[0..9]"
+                         + "': You can see that cell, it is empty, and there are N trees in it.");
+        System.out.println("  - '" + CellKinds.getTextCharView(CellKinds.Wall)
                          + "': You can see that cell and it is a WALL.");
-        System.out.println("  - '" + CellKinds.GetTextCharView(CellKinds.Home)
+        System.out.println("  - '" + CellKinds.getTextCharView(CellKinds.Home)
                          + "': You can see that cell and it is your HOME.");
-        System.out.println("  - '" + CellKinds.GetTextCharView(CellKinds.Monster)
+        System.out.println("  - '" + CellKinds.getTextCharView(CellKinds.Monster)
                          + "': You can see that cell and there is a MONSTER.");
-        System.out.println("  - '" + CellKinds.GetTextCharView(CellKinds.Treasure)
+        System.out.println("  - '" + CellKinds.getTextCharView(CellKinds.Treasure)
                          + "': You can see that cell and there is a TREASURE.");
-        System.out.println("  - '" + CellKinds.GetTextCharView(CellKinds.Unknown)
+        System.out.println("  - '" + CellKinds.getTextCharView(CellKinds.Unknown)
                          + "': It is not known what's in that cell.");
     }
 }

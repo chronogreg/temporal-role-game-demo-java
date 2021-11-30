@@ -9,7 +9,7 @@ public enum CellKinds
     Monster,
     Treasure;
 
-    public static char GetTextCharView(CellKinds cellKind)
+    public static char getTextCharView(CellKinds cellKind)
     {
         return switch (cellKind)
         {
