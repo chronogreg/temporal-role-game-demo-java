@@ -1,5 +1,9 @@
-package com.temporal.roleGameDemo;
+package com.temporal.roleGameDemo.testOfTest;
 
+import com.temporal.roleGameDemo.testOfTest.Format;
+import com.temporal.roleGameDemo.testOfTest.FormatImpl;
+import com.temporal.roleGameDemo.testOfTest.HelloWorldWorkflow;
+import com.temporal.roleGameDemo.testOfTest.HelloWorldWorkflowImpl;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.testing.TestWorkflowRule;
 import org.junit.Rule;

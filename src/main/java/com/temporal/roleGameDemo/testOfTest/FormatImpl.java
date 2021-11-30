@@ -1,4 +1,4 @@
-package com.temporal.roleGameDemo;
+package com.temporal.roleGameDemo.testOfTest;
 
 public class FormatImpl implements Format {
 

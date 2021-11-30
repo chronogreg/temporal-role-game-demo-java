@@ -1,4 +1,4 @@
-package com.temporal.roleGameDemo;
+package com.temporal.roleGameDemo.testOfTest;
 
 import com.temporal.roleGameDemo.shared.TaskQueueNames;
 import io.temporal.client.WorkflowClient;
@@ -7,7 +7,8 @@ import io.temporal.serviceclient.WorkflowServiceStubs;
 
 public class InitiateHelloWorld {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)
+    {
         // This gRPC stubs wrapper talks to the local docker instance of the Temporal service.
         WorkflowServiceStubs service = WorkflowServiceStubs.newInstance();
         // WorkflowClient can be used to start, signal, query, cancel, and terminate Workflows.

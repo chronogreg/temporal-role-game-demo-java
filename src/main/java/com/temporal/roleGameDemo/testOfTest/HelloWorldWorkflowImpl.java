@@ -1,4 +1,4 @@
-package com.temporal.roleGameDemo;
+package com.temporal.roleGameDemo.testOfTest;
 
 import io.temporal.activity.ActivityOptions;
 import io.temporal.workflow.Workflow;

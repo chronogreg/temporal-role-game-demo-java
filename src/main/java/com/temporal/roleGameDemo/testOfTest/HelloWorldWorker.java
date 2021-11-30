@@ -1,4 +1,4 @@
-package com.temporal.roleGameDemo;
+package com.temporal.roleGameDemo.testOfTest;
 
 import com.temporal.roleGameDemo.shared.TaskQueueNames;
 import io.temporal.client.WorkflowClient;
