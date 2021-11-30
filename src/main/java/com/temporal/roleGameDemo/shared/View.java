@@ -1,7 +1,6 @@
 package com.temporal.roleGameDemo.shared;
 
 import com.fasterxml.jackson.annotation.*;
-import com.temporal.roleGameDemo.shared.CellKinds;
 
 import java.lang.Math;
 
@@ -98,7 +97,7 @@ public class View {
 
     public String toString()
     {
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
 
         str.append("Pos: (");
         str.append(posX);

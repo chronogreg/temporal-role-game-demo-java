@@ -5,7 +5,6 @@ import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.workflow.Workflow;
 import io.temporal.workflow.WorkflowInfo;
 
-import java.time.Instant;
 import java.util.Optional;
 
 public class TreeGrowthWorkflowImpl implements TreeGrowthWorkflow

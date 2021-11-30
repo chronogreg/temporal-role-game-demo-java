@@ -1,6 +1,5 @@
 package com.temporal.roleGameDemo.server.workflow;
 
-import com.temporal.roleGameDemo.server.weather.WeatherProviderImpl;
 import com.temporal.roleGameDemo.shared.TaskQueueNames;
 import io.temporal.client.WorkflowClient;
 import io.temporal.serviceclient.WorkflowServiceStubs;

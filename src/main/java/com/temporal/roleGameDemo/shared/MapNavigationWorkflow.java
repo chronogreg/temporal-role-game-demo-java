@@ -6,38 +6,38 @@ import io.temporal.workflow.*;
 public interface MapNavigationWorkflow {
 
     @WorkflowMethod
-    public NavigationResults navigateMap(int width, int height);
+    NavigationResults navigateMap(int width, int height);
 
     @SignalMethod
-    public void tryMoveUp();
+    void tryMoveUp();
 
     @SignalMethod
-    public void tryMoveDown();
+    void tryMoveDown();
 
     @SignalMethod
-    public void tryMoveLeft();
+    void tryMoveLeft();
 
     @SignalMethod
-    public void tryMoveRight();
+    void tryMoveRight();
 
     @SignalMethod
-    public void quit();
+    void quit();
 
     @SignalMethod
-    public void checkWeather();
+    void checkWeather();
 
     @SignalMethod
-    public void plantTrees();
+    void plantTrees();
 
     @SignalMethod
-    public void treeHasGrown(int locationX, int locationY);
+    void treeHasGrown(int locationX, int locationY);
 
     @QueryMethod
-    public int getMapWidth();
+    int getMapWidth();
 
     @QueryMethod
-    public int getMapHeight();
+    int getMapHeight();
 
     @QueryMethod
-    public View lookAround();
+    View lookAround();
 }
