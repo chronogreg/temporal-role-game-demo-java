@@ -2,6 +2,7 @@ package com.temporal.roleGameDemo.server.weather;
 
 import com.temporal.roleGameDemo.server.workflow.MapNavigationWorkflowImpl;
 import com.temporal.roleGameDemo.shared.TaskQueueNames;
+import io.temporal.client.ActivityCompletionClient;
 import io.temporal.client.WorkflowClient;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.worker.Worker;

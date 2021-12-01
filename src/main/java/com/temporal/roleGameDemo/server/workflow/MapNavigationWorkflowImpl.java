@@ -31,15 +31,21 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
     private boolean isWeatherRequested;
 
     private final WeatherProvider weatherProvider;
+    private final Lumberjack lumberjack;
 
     public MapNavigationWorkflowImpl()
     {
-        ActivityOptions weatherProviderOptions = ActivityOptions.newBuilder()
-                .setTaskQueue(TaskQueueNames.ROLE_GAME_TASK_QUEUE)
-                .setStartToCloseTimeout(Duration.ofMinutes(1))
-                .build();
+        weatherProvider = Workflow.newActivityStub(WeatherProvider.class,
+                                                   ActivityOptions.newBuilder()
+                                                                  .setTaskQueue(TaskQueueNames.ROLE_GAME_TASK_QUEUE)
+                                                                  .setStartToCloseTimeout(Duration.ofMinutes(1))
+                                                                  .build());
 
-        weatherProvider = Workflow.newActivityStub(WeatherProvider.class, weatherProviderOptions);
+        lumberjack = Workflow.newActivityStub(Lumberjack.class,
+                                              ActivityOptions.newBuilder()
+                                                             .setTaskQueue(TaskQueueNames.ROLE_GAME_TASK_QUEUE)
+                                                             .setStartToCloseTimeout(Duration.ofMinutes(3))
+                                                             .build());
     }
 
     @Override
@@ -199,6 +205,43 @@ public class MapNavigationWorkflowImpl implements MapNavigationWorkflow {
 
         Promise<WorkflowExecution> treeWorkflowExecution = Workflow.getWorkflowExecution(treeWorkflow);
         treeWorkflowExecution.get();
+    }
+
+    @Override
+    public void lumberTrees()
+    {
+        int lumberPosX = currPosX;
+        int lumberPosY = currPosY;
+        MapCell cell = map[lumberPosX][lumberPosY];
+
+        if (cell.getLumberJob() != null)
+        {
+            System.out.println("lumberTrees(): Lumber job already in progress at  (" + currPosX + ", " + currPosY + ").");
+            return;
+        }
+
+        int startTreeCount = cell.getTreeCount();
+
+        System.out.println("InitiatING cutTrees(" + startTreeCount + ") at (" + currPosX + ", " + currPosY + ").");
+        Promise<Integer> lumberCompletion = Async.function(lumberjack::cutTrees, startTreeCount);
+        cell.setLumberJob(lumberCompletion);
+        System.out.println("InitiatED cutTrees(" + startTreeCount + ") at (" + currPosX + ", " + currPosY + ").");
+
+        lumberCompletion.thenApply((lumberCount) ->
+            {
+                System.out.println("Completed cutTrees(" + startTreeCount + ") at (" + currPosX + ", " + currPosY + ")"
+                                +  " with result=" + lumberCount + ".");
+
+                int treesCount = cell.getTreeCount() ;
+                treesCount = treesCount - lumberCount;
+                treesCount = Math.min(9, Math.max(0, treesCount));
+                cell.setTreeCount(treesCount);
+                cell.setLumberJob(null);
+
+                return null;
+            });
+
+        System.out.println("--");
     }
 
     @Override

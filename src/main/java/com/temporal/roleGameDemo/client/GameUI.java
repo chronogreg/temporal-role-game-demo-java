@@ -160,6 +160,11 @@ public class GameUI
                         mapNavigation.plantTrees();
                         return true;  // UI keeps running.
 
+                    case "lumber":
+                        System.out.println("You cut some trees into timber...");
+                        mapNavigation.lumberTrees();
+                        return true;  // UI keeps running.
+
                     case "quit":
                         System.out.println("Giving up and ending the game...");
                         mapNavigation.quit();
@@ -372,6 +377,7 @@ public class GameUI
         System.out.println("  - Right");
         System.out.println("  - Weather");
         System.out.println("  - Plant");
+        System.out.println("  - Lumber");
         System.out.println("  - Quit");
         System.out.println("  - Sleep");
         System.out.println("  - Legend");

@@ -1,12 +1,17 @@
 package com.temporal.roleGameDemo.shared;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.temporal.workflow.Promise;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MapCell
 {
     private CellKinds kind;
     private int treeCount;
+
+    @JsonIgnore
+    private Promise<Integer> lumberJob;
 
     public MapCell()
     {
@@ -17,6 +22,7 @@ public class MapCell
     {
         this.kind = kind;
         treeCount = 0;
+        lumberJob = null;
     }
 
     public CellKinds getKind()
@@ -47,6 +53,18 @@ public class MapCell
         }
 
         treeCount = count;
+    }
+
+    @JsonIgnore
+    public Promise<Integer> getLumberJob()
+    {
+        return lumberJob;
+    }
+
+    @JsonIgnore
+    public void setLumberJob(Promise<Integer> lumberJob)
+    {
+        this.lumberJob = lumberJob;
     }
 
     public char getTextCharView()

@@ -3,8 +3,8 @@ package com.temporal.roleGameDemo.shared;
 import io.temporal.workflow.*;
 
 @WorkflowInterface
-public interface MapNavigationWorkflow {
-
+public interface MapNavigationWorkflow
+{
     @WorkflowMethod
     NavigationResults navigateMap(int width, int height);
 
@@ -28,6 +28,9 @@ public interface MapNavigationWorkflow {
 
     @SignalMethod
     void plantTrees();
+
+    @SignalMethod
+    void lumberTrees();
 
     @SignalMethod
     void treeHasGrown(int locationX, int locationY);
